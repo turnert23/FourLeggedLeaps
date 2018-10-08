@@ -15,8 +15,7 @@ params.l1 = .1; % Upper link length
 params.l2 = .2; % Lower link length
 
 r0 = q0(1);
-% Use r0, rf to determine expected energy
-deltaV = (rf -r0)*100; %Constant force for now
+
 %
 
 % Use expected energy to pick a thdes, and th0
@@ -28,6 +27,9 @@ q0(2) = thdes;
 q0(3) = 0;
 q0(4) = 0;
 
+%Predict leap apex
+[pax, paz, paxd] = apexPred(r0,rf,thdes,params);
+pa = [pax, paz, paxd];
 %This tsg thing is some vestige of an iterative thing, 
 % should start at 0
 tsg = 0; % in seconds
@@ -64,6 +66,6 @@ Qg = [];
     xdf = Qg(end,5);
 
 if(showSim)
-    plotASLSim(Tg,Qg,params);
+    plotASLSim(Tg,Qg,params,pa);
 end
 

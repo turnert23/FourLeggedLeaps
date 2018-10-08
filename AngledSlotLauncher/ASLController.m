@@ -17,7 +17,7 @@ Fr = 100;
 thdes = thdes +0;
 
 %kp and kd can be tuned later? 
-kp = 1.5; 
+kp = 5; 
 kd = 0.01;
 %Fth is some PD servo on desired angle
 Fth = kp * (thdes - th) - kd * thdot;
