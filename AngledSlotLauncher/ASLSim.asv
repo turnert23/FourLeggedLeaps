@@ -7,13 +7,10 @@ addpath(genpath('PlottingFns'))
 addpath(genpath('EOMs'))
 addpath(genpath('SimulationFns'))
 
-params = struct;
-params.m = 5; %kg 
-params.g = 9.8; %m/s^2
-params.d = .2; % half body length in meters
-params.l1 = .1; % Upper link length
-params.l2 = .2; % Lower link length
-
+struct params;
+m = 5; %kg 
+g = 9.8; %m/s^2
+d = .2; % half body length in meters
 r0 = q0(1);
 % Use r0, rf to determine expected energy
 deltaV = (rf -r0)*100; %Constant force for now
@@ -44,7 +41,7 @@ Qg = [];
     maxstep=1e-3;
     %ICs
     options=odeset('events',@loEvent,'RelTol',reltol,'MaxStep',maxstep,'AbsTol',abstol);
-    [T,Q]=ode23s(@eomASL, tspan, q0, options,params, thdes, rf);
+    [T,Q]=ode23s(@eomASL, tspan, q0, options, m, g, d, thdes,rf);
     Qc= pola2cart(Q,0);
     alpha = Qc(end,5)/Qc(end,6);
     Tg = vertcat(Tg,T);
@@ -55,7 +52,7 @@ Qg = [];
     q0(7) = 0;
     q0(8) = 0;
     options=odeset('events',@apexEvent,'RelTol',reltol,'MaxStep',maxstep,'AbsTol',abstol);
-    [T,Q]=ode23s(@eomFlight,tspan,q0,options,params);
+    [T,Q]=ode23s(@eomFlight,tspan,q0,options,m,g);
     Tg = vertcat(Tg,T);
     Qg = vertcat(Qg,Q);
     tsg = T(end);
@@ -64,6 +61,6 @@ Qg = [];
     xdf = Qg(end,5);
 
 if(showSim)
-    plotASLSim(Tg,Qg,params);
+    plotASLSim(Tg,Qg,d);
 end
 

@@ -1,4 +1,4 @@
-function  [value isterminal direction] = loEvent(t,q,m,g,d,thdes,rf)
+function  [value isterminal direction] = loEvent(t, q, params, thdes, rf)
 
 rho=q(1);
 psi=q(2);

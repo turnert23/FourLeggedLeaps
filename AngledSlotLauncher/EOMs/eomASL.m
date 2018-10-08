@@ -1,4 +1,4 @@
-function [qdot] = eomASL(t,q,m,g,d,thdes,rf)
+function [qdot] = eomASL(t,q,params,thdes,rf)
 %EOMASL Equations of motion for the angled slot hopper
 %   Angled Slot hopper assumes that as long as the COM remains
 %   within the support polygon of the actual system, that 
@@ -17,18 +17,18 @@ xdot_com = rdot * sin(th) + r * thdot * cos(th);
 zdot_com = rdot * cos(th) - r * thdot * sin(th);
 
 %Determine controlinputs
-[Fr, Fth] = ASLController(t,q,m,g,thdes);
+[Fr, Fth] = ASLController(t,q,params,thdes,rf);
 
 %Radial DOF unchanged
-rdd = Fr/m - g * cos(th) + r * thdot ^2;
+rdd = Fr/params.m - params.g * cos(th) + r * thdot ^2;
 %Determine whether COM is in support polygon
 
-if(COMinSP(d,r,th))
-    thdd = Fth + m * r * (g * sin(th) - 2 * rdot * thdot)/ ...
-        (m * r^2);
+if(COMinSP(r,th, params))
+    thdd = Fth + params.m * r * (params.g * sin(th) - 2 * rdot * thdot)/ ...
+        (params.m * r^2);
 else
-    thdd = m * r * (g * sin(th) - 2 * rdot * thdot)/ ...
-        (m * r^2);
+    thdd = params.m * r * (params.g * sin(th) - 2 * rdot * thdot)/ ...
+        (params.m * r^2);
 end
 qdot = [q(3:4);rdd;thdd];
 

@@ -1,4 +1,4 @@
-function [qdot] = eomFlight(t,q,m,g)
+function [qdot] = eomFlight(t,q,params)
     x=q(1);
     z=q(2);
     theta = q(3);
@@ -7,5 +7,5 @@ function [qdot] = eomFlight(t,q,m,g)
     zdot = q(6);
     thetadot = q(7);
     rdot = q(8);
-    qdot = [q(5:8);0;-g;0;0];
+    qdot = [q(5:8);0;-params.g;0;0];
 end

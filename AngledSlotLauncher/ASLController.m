@@ -1,4 +1,4 @@
-function [Fr, Fth] = ASLController(t,q,m,g,thdes,rf)
+function [Fr, Fth] = ASLController(t,q,params, thdes,rf)
 %ASLCONTROLLER Feedback controller for ASL
 %   Based on current state and intrinsic params, 
 %   determine Fr and Fth as inputs to the system
@@ -8,17 +8,21 @@ rdot = q(3);
 thdot = q(4);
 
 %Find max tau available after stablilizing angle
-tau = 5; % For now
+%tau = 6; % For now
 
-Fr = 4 * radLegKinematics(r,.1,.2,tau);  
+%Fr = 4 * radLegKinematics(r,tau, params);  
+Fr = 100;
 
 %Determine if thdes should be updated
 thdes = thdes +0;
 
 %kp and kd can be tuned later? 
-kp = 5; 
-kd = 0.1;
+kp = 1.5; 
+kd = 0.01;
 %Fth is some PD servo on desired angle
 Fth = kp * (thdes - th) - kd * thdot;
+
+[Fth, Fr] = SaturationComputer(Fth,Fr,q,params);
+
 end
 

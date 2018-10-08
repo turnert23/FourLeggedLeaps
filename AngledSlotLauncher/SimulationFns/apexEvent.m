@@ -1,4 +1,4 @@
-function  [value isterminal direction] = apexEvent(t,q,m,g)
+function  [value isterminal direction] = apexEvent(t,q, params)
 
 zd = q(6);
 

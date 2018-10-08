@@ -1,6 +1,6 @@
-function [] = plotASLSim(T,Q,d)
+function [] = plotASLSim(T,Q,params)
    
-    
+    d = params.d;
     a = figure(1);
     box = 1.6;
     axis([Q(1,1)-box/2,Q(1,1)+box/2,0,box]);
