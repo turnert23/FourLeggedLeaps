@@ -2,6 +2,12 @@ function [] = ASLSim(q0, rf, showSim)
 %ASLSIM Simulates an angled slot launcher
 %  
 
+
+addpath(genpath('PlottingFns'))
+addpath(genpath('EOMs'))
+addpath(genpath('SimulationFns'))
+
+
 m = 5; %kg 
 g = 9.8; %m/s^2
 d = .2; % half body length in meters
