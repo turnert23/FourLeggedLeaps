@@ -6,23 +6,23 @@ r = q(1);
 th = q(2);
 rdot = q(3);
 thdot = q(4);
-
+% [Fth, Fr] = UnderheadController(thdes,q,params);
 %Find max tau available after stablilizing angle
 %tau = 6; % For now
 
 %Fr = 4 * radLegKinematics(r,tau, params);  
-Fr = 200; %PWM Saturated Control
+Fr = 200 - 800 * (th-thdes) %PWM Saturated Control
 
 %Determine if thdes should be updated
-thdes = thdes +0;
+% thdes = thdes +0;
 
 %kp and kd can be tuned later? 
-kp = 250; 
+kp = 500; 
 kd = 0.01;
 %Fth is some PD servo on desired angle
-% Fth = kp * (thdes - th) - kd * thdot;
-Fth = -(params.m * r*(params.g *sin(th) -2*rdot*thdot))
-% [Fth, Fr] = SaturationComputer(Fth,Fr,q,params);
+% Fth = kp * (thdes - th) - kd * thdot + -(params.m * r*(params.g *sin(th) -2*rdot*thdot));
+Fth = -(params.m * r*(params.g *sin(th) - 2*rdot*thdot)) + kp * (thdes - th) - kd * thdot;
+[Fth, Fr] = SaturationComputer(Fth,Fr,q,params);
 
 end
 

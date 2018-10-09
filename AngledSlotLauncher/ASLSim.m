@@ -14,7 +14,7 @@ params.g = 9.8; %m/s^2
 params.d = .2; % half body length in meters
 params.l1 = .1; % Upper link length
 params.l2 = .2; % Lower link length
-params.vms = 6; % Virtual motor saturation in NM
+params.vms = 8; % Virtual motor saturation in NM
 
 r0 = q0(1);
 
@@ -22,7 +22,7 @@ r0 = q0(1);
 
 % Use expected energy to pick a thdes, and th0
 %
-thdes = .2;
+thdes = .4;
 q0(2) = thdes; 
 
 %initial velocities are zero 
