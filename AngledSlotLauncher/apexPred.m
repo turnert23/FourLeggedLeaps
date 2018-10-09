@@ -4,7 +4,7 @@ function [xA, zA, xdA] = apexPred(r0,rf,thdes,params)
 
 % Use r0, rf to determine expected energy
 %Conservative expection of final added kinetic energy.
-deltaV = integral(@(x)radLegKinematics(x,5,params),r0,rf) -...
+deltaV = integral(@(x)radLegKinematics(x,params.vms,params),r0,rf) -...
     (rf*cos(thdes) - r0*cos(thdes));
 toVel = sqrt(2*deltaV/params.m);
 toAngle = pi/2-thdes;

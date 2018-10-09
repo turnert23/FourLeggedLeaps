@@ -5,15 +5,15 @@ function [FthActual,FrActual] = SaturationComputer(FthDes,FrDes,q,params)
 %   the forward kinematics
 
 % Motor Saturation torque (around 3 Nm per motor)
-virtual_motor_sat = 12;
-l = q(1); % Current extension of legs
+virtual_motor_sat = params.vms;
+r = q(1); % Current extension of legs
 L1 = params.l1; % Upper link length
 L2 = params.l2; % Lower link length
 
-jacobian = [-1 ((1/L1)-((l^2+L1^2-L2^2)/(2*l^2*L1)))/...
-            sqrt(1-((l^2+L1^2-L2^2)^2)/(4*l^2*L1^2)) ; 
-            -1 -((1/L1)-((l^2+L1^2-L2^2)/(2*l^2*L1)))/...
-            sqrt(1-((l^2+L1^2-L2^2)^2)/(4*l^2*L1^2))];
+jacobian = [-1 ((1/L1)-((r^2+L1^2-L2^2)/(2*r^2*L1)))/...
+            sqrt(1-((r^2+L1^2-L2^2)^2)/(4*r^2*L1^2)) ; 
+            -1 -((1/L1)-((r^2+L1^2-L2^2)/(2*r^2*L1)))/...
+            sqrt(1-((r^2+L1^2-L2^2)^2)/(4*r^2*L1^2))];
 
 
 % Calculate demanded torques from the motors
@@ -25,8 +25,8 @@ motor_tor2    = motor_tor2*(abs(motor_tor2)<virtual_motor_sat) + sign(motor_tor2
 
 % Go back to find final force and torque
 res = jacobian'*[-motor_tor1 ; -motor_tor2];
-FthActual = res(1);
-FrActual   = res(2);
+FthActual = res(1)
+FrActual   = res(2)
 
 end
 

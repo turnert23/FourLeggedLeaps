@@ -9,7 +9,7 @@ for k=1:length(qp)
     z = r*cos(th);
     xdot = rdot * sin(th) + r * thdot * cos(th);
     zdot = rdot * cos(th) - r * thdot * sin(th);
-    qcr = [x, z, th,r,xdot,zdot,0,0];
+    qcr = [x, z, th,r,xdot,zdot,thdot,rdot];
     qc = [qc;qcr];
     
 

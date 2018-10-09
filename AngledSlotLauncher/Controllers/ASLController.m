@@ -11,18 +11,18 @@ thdot = q(4);
 %tau = 6; % For now
 
 %Fr = 4 * radLegKinematics(r,tau, params);  
-Fr = 100;
+Fr = 200; %PWM Saturated Control
 
 %Determine if thdes should be updated
 thdes = thdes +0;
 
 %kp and kd can be tuned later? 
-kp = 5; 
+kp = 250; 
 kd = 0.01;
 %Fth is some PD servo on desired angle
-Fth = kp * (thdes - th) - kd * thdot;
-
-[Fth, Fr] = SaturationComputer(Fth,Fr,q,params);
+% Fth = kp * (thdes - th) - kd * thdot;
+Fth = -(params.m * r*(params.g *sin(th) -2*rdot*thdot))
+% [Fth, Fr] = SaturationComputer(Fth,Fr,q,params);
 
 end
 

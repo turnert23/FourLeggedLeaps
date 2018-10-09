@@ -6,13 +6,15 @@ function [] = ASLSim(q0, rf, showSim)
 addpath(genpath('PlottingFns'))
 addpath(genpath('EOMs'))
 addpath(genpath('SimulationFns'))
+addpath(genpath('Controllers'))
 
 params = struct;
-params.m = 5; %kg 
+params.m = 6; %kg 
 params.g = 9.8; %m/s^2
 params.d = .2; % half body length in meters
 params.l1 = .1; % Upper link length
 params.l2 = .2; % Lower link length
+params.vms = 6; % Virtual motor saturation in NM
 
 r0 = q0(1);
 
@@ -48,17 +50,19 @@ Qg = [];
     options=odeset('events',@loEvent,'RelTol',reltol,'MaxStep',maxstep,'AbsTol',abstol);
     [T,Q]=ode23s(@eomASL, tspan, q0, options,params, thdes, rf);
     Qc= pola2cart(Q,0);
-    alpha = Qc(end,5)/Qc(end,6);
+    
     Tg = vertcat(Tg,T);
-    Qg = vertcat(Qg,Qc);
-    q0 = Qg(end,:);
+    q0 = Qc(end,:);    
     q0(3) = 0;
     q0(4) = .15;
     q0(7) = 0;
     q0(8) = 0;
+    Qc = horzcat(Qc,zeros(size(Qc,1),1));
+    Qg = vertcat(Qg,Qc);
     options=odeset('events',@apexEvent,'RelTol',reltol,'MaxStep',maxstep,'AbsTol',abstol);
     [T,Q]=ode23s(@eomFlight,tspan,q0,options,params);
-    Tg = vertcat(Tg,T);
+    Tg = vertcat(Tg,T+Tg(end));
+    Q = horzcat(Q,ones(size(Q,1),1));
     Qg = vertcat(Qg,Q);
     tsg = T(end);
  
@@ -67,5 +71,6 @@ Qg = [];
 
 if(showSim)
     plotASLSim(Tg,Qg,params,pa);
+    plotStates(Tg,Qg);
 end
 
