@@ -25,8 +25,8 @@ motor_tor2    = motor_tor2*(abs(motor_tor2)<virtual_motor_sat) + sign(motor_tor2
 
 % Go back to find final force and torque
 res = jacobian'*[-motor_tor1 ; -motor_tor2];
-FthActual = res(1)
-FrActual   = res(2)
+FthActual = res(1);
+FrActual   = res(2);
 
 end
 

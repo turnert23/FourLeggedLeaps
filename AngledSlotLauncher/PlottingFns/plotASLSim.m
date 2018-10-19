@@ -1,4 +1,4 @@
-function [] = plotASLSim(T,Q,params,apexPred)
+function [] = plotASLSim(T,Q,params,xtar,greencirc)
    
     d = params.d;
     a = figure(1);
@@ -27,8 +27,11 @@ function [] = plotASLSim(T,Q,params,apexPred)
        line([Q(k,1) - d ,Q(k,1) - d - Q(k,4)*sin(Q(k,3))],[Q(k,2),Q(k,2)-Q(k,4)*cos(Q(k,3))],'LineWidth',4,'Color','k');
        line([Q(k,1) + d ,Q(k,1) + d - Q(k,4)*sin(Q(k,3))],[Q(k,2),Q(k,2)-Q(k,4)*cos(Q(k,3))],'LineWidth',4,'Color','k');
        axis([Q(k,1)-box/2,Q(k,1)+box/2,0,box]);
-       plot(apexPred(1),apexPred(2),'go','MarkerSize',10);
-       plot(Q(k,1),Q(k,2),'rx');
+       plot(greencirc ,0,'go','MarkerSize',10);
+       if swIndex ~= inf
+        plot(xtar/2 + Q(swIndex,1),0,'bo','MarkerSize',10);
+       end
+        plot(Q(k,1),Q(k,2),'rx');
        hold off;
        %     line([Q(k,1),Q(k,1)-Q(k,4)*sin(Q(k,3))],[Q(k,2),Q(k,2)-Q(k,4)*cos(Q(k,3))]);
        if(mod(k,4)==0)

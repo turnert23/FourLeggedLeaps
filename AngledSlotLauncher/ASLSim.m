@@ -1,4 +1,4 @@
-function [] = ASLSim(q0, rf, showSim)
+function [] = ASLSim(r0, xtar, showSim)
 %ASLSIM Simulates an angled slot launcher
 %  
 
@@ -15,23 +15,22 @@ params.d = .2; % half body length in meters
 params.l1 = .1; % Upper link length
 params.l2 = .2; % Lower link length
 params.vms = 8; % Virtual motor saturation in NM
-
-r0 = q0(1);
+%
 
 %
 
 % Use expected energy to pick a thdes, and th0
 %
-thdes = .4;
-q0(2) = thdes; 
+q0(1) = r0;
+q0(2) = ThetaTO(r0,.28, params,xtar); 
 
 %initial velocities are zero 
 q0(3) = 0;
 q0(4) = 0;
 
 %Predict leap apex
-[pax, paz, paxd] = apexPred(r0,rf,thdes,params);
-pa = [pax, paz, paxd];
+% [pax, paz, paxd] = apexPred(r0,rf,thdes,params);
+% pa = [pax, paz, paxd];
 %This tsg thing is some vestige of an iterative thing, 
 % should start at 0
 tsg = 0; % in seconds
@@ -47,8 +46,9 @@ Qg = [];
     reltol=1e-3; 
     maxstep=1e-3;
     %ICs
+    greencirc = xtar/2 + sin(q0(2))*.28
     options=odeset('events',@loEvent,'RelTol',reltol,'MaxStep',maxstep,'AbsTol',abstol);
-    [T,Q]=ode23s(@eomASL, tspan, q0, options,params, thdes, rf);
+    [T,Q]=ode23s(@eomASL, tspan, q0, options,params, xtar+sin(q0(2))*.28,q0(2));
     Qc= pola2cart(Q,0);
     
     Tg = vertcat(Tg,T);
@@ -70,7 +70,7 @@ Qg = [];
     xdf = Qg(end,5);
 
 if(showSim)
-    plotASLSim(Tg,Qg,params,pa);
+    plotASLSim(Tg,Qg,params,xtar,greencirc);
     plotStates(Tg,Qg);
 end
 
